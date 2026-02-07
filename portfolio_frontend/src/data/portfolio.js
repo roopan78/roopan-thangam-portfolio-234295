@@ -8,9 +8,9 @@ const portfolio = {
   profile: {
     name: "Roopan Thangam",
     role: "Salesforce Developer",
-    location: "Toronto, ON, Canada",
-    email: "roopan.thangam@example.com",
-    phone: "+1 (647) 555-0142",
+    location: "Tirunelveli, Tamil Nadu, India",
+    email: "roopanth21@outlook.com",
+    phone: "+91 8610930273",
     links: {
       github: "https://github.com/roopan-thangam",
       linkedin: "https://www.linkedin.com/in/roopan-thangam/",
@@ -20,153 +20,132 @@ const portfolio = {
   },
 
   summary:
-    "Salesforce Developer with hands-on experience delivering Lightning-based solutions, Flow automations, and Apex integrations. I focus on building maintainable, scalable implementations that improve sales and service operations, with a strong emphasis on clean data models, security, and user adoption.",
+    "Salesforce Developer with 1 year of experience in Lightning Web Components (LWC), Apex, and SOQL. Skilled in building scalable applications, optimizing business processes, and delivering client-specific solutions. Experienced in working on multi-module Salesforce products and providing end-to-end development and support. Holds Salesforce AI Associate and Salesforce Administrator certifications.",
 
   skills: [
     {
       name: "Salesforce Platform",
       items: [
-        "Apex (Classes, Triggers, Batch, Queueable)",
         "Lightning Web Components (LWC)",
-        "Lightning Aura (maintenance)",
-        "SOQL/SOSL",
-        "Salesforce Flow (Screen, Record-Triggered, Scheduled)",
-        "Validation Rules & Approval Processes",
-        "Security (Profiles, Permission Sets, Sharing)",
-        "Experience Cloud (basic)"
-      ]
+        "Apex",
+        "Apex Triggers",
+        "Aura Components",
+        "Visualforce Pages",
+        "Flows",
+        "SOQL"
+      ],
+      proficiency: "Advanced"
     },
     {
-      name: "Integration & Data",
+      name: "Web Technologies",
       items: [
-        "REST/SOAP Integrations",
-        "Platform Events (basic)",
-        "External Services",
-        "ETL/Data Loader",
-        "Data Modeling & Governance",
-        "Error handling & logging patterns"
-      ]
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      proficiency: "Advanced"
     },
     {
-      name: "DevOps & Tools",
+      name: "Tools & Version Control",
       items: [
-        "SFDX & Salesforce CLI",
-        "Git & GitHub",
-        "VS Code",
-        "Change Sets (legacy orgs)",
-        "Scratch Orgs (basic)",
-        "CI/CD fundamentals"
-      ]
-    },
-    {
-      name: "Web/Programming",
-      items: ["JavaScript/TypeScript fundamentals", "HTML/CSS", "Node.js basics", "Postman"],
+        "Git",
+        "Salesforce CLI",
+        "VS Code"
+      ],
       proficiency: "Intermediate"
     }
   ],
 
   highlights: [
-    "Designed and delivered Flow + Apex automation that reduced manual case triage by ~40%.",
-    "Built reusable LWC components with consistent UX patterns and improved page performance.",
-    "Implemented secure integrations with robust error handling and retry strategies.",
-    "Partnered with business stakeholders to translate requirements into scalable Salesforce solutions."
+    "Developed and maintained RangerNXT, a single-page Salesforce application for rapid form creation.",
+    "Implemented instant PDF generation with configurable options to enhance business document handling.",
+    "Contributed to RangerFusion, a multi-business solution covering HRM, ESS, Finance, and more.",
+    "Provided client support and customization for iPower, Cloudbyts, and Effitech.",
+    "Attended Salesforce TDX at Bangalore for RangerNXT product."
   ],
 
   experience: [
     {
-      company: "CloudOps Solutions (Example)",
+      company: "Ranger Technologies",
       title: "Salesforce Developer",
-      period: "2023 — Present",
-      location: "Toronto, ON",
-      bullets: [
-        "Developed Lightning Web Components and Apex services to support Sales and Service workflows.",
-        "Implemented record-triggered and scheduled Flows to automate lead assignment, follow-ups, and SLA tracking.",
-        "Built REST integrations to synchronize customer data with external systems; improved observability with structured logging.",
-        "Performed data quality cleanup and implemented validation rules to reduce duplicate and incomplete records."
-      ]
-    },
-    {
-      company: "CRMWorks Consulting (Example)",
-      title: "Salesforce Developer / Admin",
-      period: "2021 — 2023",
+      period: "Oct 2024 — Present",
       location: "Remote",
       bullets: [
-        "Delivered end-to-end Salesforce enhancements including configuration, security, and custom development.",
-        "Optimized Apex trigger patterns and introduced bulk-safe designs to reduce governor limit issues.",
-        "Created reports and dashboards for sales leadership, improving visibility into pipeline and activity metrics.",
-        "Supported UAT and release planning; authored admin/developer documentation for smoother adoption."
+        "Developed and maintained features in RangerNXT, a single-page Salesforce application for rapid form creation, reducing LWC and Apex development time.",
+        "Implemented instant PDF generation with configurable options to enhance business document handling.",
+        "Contributed to RangerFusion, a multi-business solution covering HRM, ESS, Finance, and more.",
+        "Developed and optimized modules for Sales Order, Purchase Order, Estimation, and Invoice.",
+        "Provided client support and customization for iPower, Cloudbyts, and Effitech, particularly in the Sales App module.",
+        "Wrote and optimized SOQL queries for high-performance data retrieval and implemented business logic in Apex."
       ]
     }
   ],
 
   projects: [
     {
-      title: "Service Case Automation Suite",
+      title: "RangerNXT Form Builder",
       summary:
-        "A set of Flows and Apex utilities that automate case routing, prioritization, and SLA notifications while keeping security and audit requirements intact.",
-      tech: ["Salesforce Flow", "Apex", "LWC", "Custom Metadata Types"],
-      tags: ["Automation", "Service Cloud", "SLA"],
+        "Built dynamic form generation in Salesforce with customizable UI and instant PDF output. A single-page application that reduces LWC and Apex development time significantly.",
+      tech: ["LWC", "Apex", "Visualforce", "JavaScript", "CSS"],
+      tags: ["Form Builder", "PDF Generation", "Automation"],
       links: {
         demo: "",
         repo: ""
-      }
+      },
+      details: "RangerNXT enables rapid form creation with a user-friendly interface, allowing businesses to build forms without extensive coding. Features include instant PDF generation with configurable templates and options."
     },
     {
-      title: "Reusable LWC UI Kit",
+      title: "Sales Order & Invoice Automation",
       summary:
-        "A small library of reusable LWC components (tables, empty states, toasts, modals) to speed up delivery and standardize UX across teams.",
-      tech: ["LWC", "SLDS", "JavaScript"],
-      tags: ["Frontend", "Component Library", "UX"],
+        "Streamlined sales operations through LWC and Apex automation. Developed and optimized modules for Sales Order, Purchase Order, Estimation, and Invoice within RangerFusion.",
+      tech: ["LWC", "Apex", "SOQL", "Flows"],
+      tags: ["Automation", "Sales Cloud", "Finance"],
       links: {
         demo: "",
         repo: ""
-      }
+      },
+      details: "Implemented end-to-end automation for sales processes, reducing manual data entry and improving accuracy. Integrated with existing business workflows for seamless operations."
     },
     {
-      title: "Customer Data Sync Integration",
+      title: "RangerFusion Multi-Business Solution",
       summary:
-        "A REST-based integration that synchronizes customer profiles and key events between Salesforce and an external platform with retry and error handling patterns.",
-      tech: ["Apex", "REST", "Named Credentials", "Platform Events (basic)"],
-      tags: ["Integration", "Data", "Reliability"],
+        "Contributed to a comprehensive multi-business solution covering HRM, ESS, Finance, and more. Provided client support and customization for multiple enterprises.",
+      tech: ["LWC", "Apex", "Aura Components", "SOQL"],
+      tags: ["Enterprise Solution", "HRM", "Finance"],
       links: {
         demo: "",
         repo: ""
-      }
+      },
+      details: "RangerFusion is a modular Salesforce solution designed to handle multiple business functions. Worked on customizations for iPower, Cloudbyts, and Effitech clients, particularly in the Sales App module."
     }
   ],
 
   certifications: [
     {
-      name: "Salesforce Certified Platform Developer I",
+      name: "Salesforce Certified AI Associate",
       issuer: "Salesforce",
-      year: 2023,
+      year: 2024,
       verifyUrl: ""
     },
     {
       name: "Salesforce Certified Administrator",
       issuer: "Salesforce",
-      year: 2022,
+      year: 2024,
       verifyUrl: ""
     }
   ],
 
   education: [
     {
-      institution: "Postgraduate Program (Example)",
-      degree: "Software Development / Cloud Computing",
-      period: "2020 — 2021",
-      details: "Coursework included web development, databases, and cloud fundamentals."
-    },
-    {
-      institution: "Bachelor’s Degree (Example)",
-      degree: "Computer Science",
-      period: "2016 — 2020",
-      details: "Focus on programming fundamentals, data structures, and software engineering."
+      institution: "Francis Xavier Engineering College",
+      degree: "B.E – Computer Science and Engineering",
+      period: "Aug 2020 — May 2024",
+      details: "Tamil Nadu, India. Graduated with a Bachelor of Engineering degree specializing in Computer Science and Engineering."
     }
   ],
 
   contact: {
-    fallbackEmail: "roopan.thangam@example.com"
+    fallbackEmail: "roopanth21@outlook.com"
   }
 };
 
