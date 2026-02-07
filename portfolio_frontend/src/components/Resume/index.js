@@ -36,9 +36,9 @@ export function Resume() {
     // avoid overly large delays so content isn't perceived as "missing".
     const base = reducedMotion ? 0 : 90;
     return {
-      header: { ["--reveal-delay"]: `${base * 0}ms` },
-      card: { ["--reveal-delay"]: `${base * 1}ms` },
-      button: { ["--reveal-delay"]: `${base * 2}ms` },
+      header: { "--reveal-delay": `${base * 0}ms` },
+      card: { "--reveal-delay": `${base * 1}ms` },
+      button: { "--reveal-delay": `${base * 2}ms` },
     };
   }, [reducedMotion]);
 
