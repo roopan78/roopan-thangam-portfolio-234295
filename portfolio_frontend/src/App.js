@@ -192,39 +192,45 @@ function App() {
           </div>
         </section>
 
-        {/* Skills Section */}
+        {/* Skills Section - Enhanced with category cards and skill chips */}
         <section id="skills" className="section">
           <div className="container">
             <header className="section-header">
               <h2 className="section-title">Technical Skills</h2>
+              <p className="section-subtitle">A comprehensive overview of my technical expertise and proficiencies</p>
             </header>
-            <div className="skills-grid grid grid-2">
+            <div className="skills-grid">
               {portfolio.skills.map((skillGroup, idx) => (
-                <div key={idx} className="card">
-                  <h3 className="skill-group-title">{skillGroup.name}</h3>
-                  <ul className="skill-list">
+                <div key={idx} className="skill-category-card">
+                  <div className="skill-category-header">
+                    <h3 className="skill-group-title">{skillGroup.name}</h3>
+                    {skillGroup.proficiency && (
+                      <span className="skill-proficiency-badge">{skillGroup.proficiency}</span>
+                    )}
+                  </div>
+                  <div className="skill-chips-container">
                     {skillGroup.items.map((skill, skillIdx) => (
-                      <li key={skillIdx} className="skill-item">
-                        <span className="skill-bullet">•</span>
-                        <span>{skill}</span>
-                      </li>
+                      <span key={skillIdx} className="skill-chip">
+                        {skill}
+                      </span>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Experience Section */}
+        {/* Experience Section - Enhanced with timeline styling */}
         <section id="experience" className="section bg-surface">
           <div className="container">
             <header className="section-header">
               <h2 className="section-title">Professional Experience</h2>
+              <p className="section-subtitle">My career journey and key achievements in Salesforce development</p>
             </header>
-            <div className="experience-list stack">
+            <div className="experience-list">
               {portfolio.experience.map((job, idx) => (
-                <div key={idx} className="card">
+                <article key={idx} className="experience-item">
                   <div className="experience-header">
                     <div>
                       <h3 className="experience-title">{job.title}</h3>
@@ -240,7 +246,7 @@ function App() {
                       <li key={bulletIdx}>{bullet}</li>
                     ))}
                   </ul>
-                </div>
+                </article>
               ))}
             </div>
           </div>

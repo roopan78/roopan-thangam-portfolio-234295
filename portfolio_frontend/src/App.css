@@ -388,16 +388,82 @@
   font-size: 14px;
 }
 
-/* Skills Section */
+/* Skills Section - Enhanced with category cards and skill chips */
 .skills-grid {
+  display: grid;
   gap: var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.skill-category-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out);
+}
+
+.skill-category-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(37, 99, 235, 0.25);
+}
+
+.skill-category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-3);
+  border-bottom: 2px solid var(--color-primary);
 }
 
 .skill-group-title {
   font-size: 18px;
   font-weight: 700;
-  margin: 0 0 var(--space-4) 0;
+  margin: 0;
   color: var(--color-primary);
+}
+
+.skill-proficiency-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(245, 158, 11, 0.14);
+  color: #92400e;
+  border: 1px solid rgba(245, 158, 11, 0.40);
+}
+
+.skill-chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--color-text);
+  border: 1px solid rgba(37, 99, 235, 0.20);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.skill-chip:hover {
+  background: rgba(37, 99, 235, 0.14);
+  border-color: rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
 }
 
 .skill-list {
@@ -422,9 +488,54 @@
   font-weight: 700;
 }
 
-/* Experience Section */
+/* Experience Section - Enhanced with timeline styling */
 .experience-list {
-  gap: var(--space-6);
+  position: relative;
+  padding-left: var(--space-8);
+}
+
+/* Timeline line */
+.experience-list::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--color-primary) 0%, rgba(37, 99, 235, 0.3) 100%);
+  border-radius: 999px;
+}
+
+.experience-item {
+  position: relative;
+  margin-bottom: var(--space-8);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out);
+}
+
+.experience-item:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(37, 99, 235, 0.25);
+}
+
+/* Timeline dot */
+.experience-item::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--space-8) - 8px);
+  top: var(--space-6);
+  width: 16px;
+  height: 16px;
+  background: var(--color-primary);
+  border: 3px solid var(--color-surface);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  z-index: 1;
 }
 
 .experience-header {
@@ -460,6 +571,10 @@
 .experience-period {
   font-size: 14px;
   font-weight: 600;
+  background: rgba(37, 99, 235, 0.10);
+  color: var(--color-primary);
+  padding: 4px 10px;
+  border-radius: 6px;
 }
 
 .experience-location {
@@ -799,6 +914,10 @@
     align-items: flex-start;
     text-align: left;
   }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 768px) {
@@ -847,6 +966,21 @@
 
   .contact-links .btn {
     width: 100%;
+  }
+
+  /* Experience timeline adjustments for mobile */
+  .experience-list {
+    padding-left: var(--space-6);
+  }
+
+  .experience-item::before {
+    left: calc(-1 * var(--space-6) - 6px);
+    width: 12px;
+    height: 12px;
+  }
+
+  .experience-list::before {
+    width: 2px;
   }
 }
 
