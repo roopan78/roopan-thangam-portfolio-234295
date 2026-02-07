@@ -146,7 +146,16 @@ export function Hero() {
 
               <a
                 className={styles.secondaryCta}
+                href="#resume"
+                style={getMagneticTransform(reducedMotion ? 0 : 6)}
+              >
+                View Resume
+              </a>
+
+              <a
+                className={styles.secondaryCta}
                 href="/resume.pdf"
+                download
                 style={getMagneticTransform(reducedMotion ? 0 : 6)}
               >
                 Download Resume
