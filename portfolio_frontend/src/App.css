@@ -1,37 +1,89 @@
-/* CSS Variables for Theme Management */
+/* Ocean Professional Theme + App component styles
+   - Keeps CRA defaults intact (App/App-header/App-link still exist)
+   - Provides reusable layout primitives & utilities for the portfolio UI
+*/
+
+/* Theme tokens (Light theme is the default) */
 :root {
-  /* Light theme colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --text-primary: #282c34;
-  --text-secondary: #61dafb;
-  --border-color: #e9ecef;
-  --button-bg: #007bff;
-  --button-text: #ffffff;
+  /* Brand palette */
+  --color-primary: #2563eb;   /* blue-600 */
+  --color-secondary: #f59e0b; /* amber-500 */
+
+  /* Surfaces & text */
+  --color-bg: #f9fafb;        /* gray-50 */
+  --color-surface: #ffffff;   /* white */
+  --color-text: #111827;      /* gray-900 */
+
+  /* Supporting tokens */
+  --color-muted: #6b7280;      /* gray-500 */
+  --color-border: #e5e7eb;     /* gray-200 */
+  --color-focus: #2563eb;
+
+  /* Shadows & radii (subtle, modern) */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+
+  --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.06), 0 1px 1px rgba(17, 24, 39, 0.04);
+  --shadow-md: 0 10px 25px rgba(17, 24, 39, 0.08);
+
+  /* Typography */
+  --font-sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+
+  /* Layout */
+  --container-max: 1100px;
+  --container-max-wide: 1200px;
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 120ms;
+  --duration: 200ms;
+
+  /* Gradient option: "from blue-500/10 to gray-50" equivalent */
+  --gradient-hero: linear-gradient(135deg, rgba(37, 99, 235, 0.10) 0%, #f9fafb 55%, #f9fafb 100%);
 }
 
+/* Optional dark theme support (do not break existing toggle usage).
+   The app currently toggles [data-theme="dark"] on <html>. */
 [data-theme="dark"] {
-  /* Dark theme colors */
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #282c34;
-  --text-primary: #ffffff;
-  --text-secondary: #61dafb;
-  --border-color: #404040;
-  --button-bg: #0056b3;
-  --button-text: #ffffff;
+  --color-bg: #0b1220;
+  --color-surface: #0f172a;
+  --color-text: #e5e7eb;
+  --color-muted: #9ca3af;
+  --color-border: rgba(229, 231, 235, 0.14);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.30);
+  --shadow-md: 0 18px 40px rgba(0, 0, 0, 0.40);
+
+  --gradient-hero: linear-gradient(135deg, rgba(37, 99, 235, 0.18) 0%, rgba(15, 23, 42, 1) 60%, rgba(11, 18, 32, 1) 100%);
 }
 
+/* CRA root */
 .App {
-  text-align: center;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  text-align: left;
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  transition: background-color var(--duration) var(--ease-out), color var(--duration) var(--ease-out);
 }
 
+/* Keep CRA logo animation behavior */
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+  filter: drop-shadow(0 10px 20px rgba(17, 24, 39, 0.10));
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -40,48 +92,288 @@
   }
 }
 
+/* CRA header class still works (used by template App.js) */
 .App-header {
-  background-color: var(--bg-secondary);
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  place-items: center;
+  padding: var(--space-10) var(--space-6);
+  background: var(--gradient-hero);
+  color: var(--color-text);
+  transition: background-color var(--duration) var(--ease-out);
+  position: relative;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+/* CRA link class still works */
+.App-link {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out), text-decoration-color var(--duration-fast) var(--ease-out);
+}
+
+.App-link:hover {
+  color: #1d4ed8; /* blue-700 */
+  text-decoration: underline;
+  text-decoration-color: rgba(37, 99, 235, 0.35);
+}
+
+/* === Layout primitives === */
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}
+
+.container-wide {
+  width: 100%;
+  max-width: var(--container-max-wide);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}
+
+.section {
+  padding-block: clamp(32px, 5vw, 56px);
+}
+
+.section-header {
+  margin-bottom: var(--space-6);
+}
+
+.section-title {
+  font-size: clamp(20px, 2.2vw, 28px);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--space-2) 0;
+}
+
+.section-subtitle {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+.bg-surface {
+  background: var(--color-surface);
+}
+
+.bg-hero-gradient {
+  background: var(--gradient-hero);
+}
+
+/* === Cards === */
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-6);
+  transition: transform var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out);
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(37, 99, 235, 0.25);
+}
+
+/* === Buttons === */
+
+.btn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: var(--text-primary);
-  transition: background-color 0.3s ease;
-  position: relative;
+  gap: var(--space-2);
+  border-radius: 12px;
+  border: 1px solid transparent;
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
 }
 
-.App-link {
-  color: var(--text-secondary);
-  transition: color 0.3s ease;
+.btn:active {
+  transform: translateY(0);
 }
 
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #ffffff;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
+}
+
+.btn-primary:hover {
+  background: #1d4ed8; /* blue-700 */
+}
+
+.btn-secondary {
+  background: rgba(245, 158, 11, 0.16);
+  color: #92400e; /* amber-800 */
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.btn-secondary:hover {
+  background: rgba(245, 158, 11, 0.22);
+  border-color: rgba(245, 158, 11, 0.55);
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.btn-outline:hover {
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: var(--shadow-sm);
+}
+
+/* === Pills / Chips === */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  border: 1px solid var(--color-border);
+  background: rgba(17, 24, 39, 0.04);
+  color: var(--color-text);
+}
+
+.chip-primary {
+  border-color: rgba(37, 99, 235, 0.30);
+  background: rgba(37, 99, 235, 0.10);
+  color: #1d4ed8;
+}
+
+.chip-amber {
+  border-color: rgba(245, 158, 11, 0.40);
+  background: rgba(245, 158, 11, 0.14);
+  color: #92400e;
+}
+
+/* === Utilities === */
+
+.muted {
+  color: var(--color-muted);
+}
+
+.hr {
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  margin: var(--space-6) 0;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.row {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* === Focus styles (accessible) ===
+   Use :focus-visible to avoid showing focus on mouse clicks. */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.35);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+/* Existing template class: theme toggle button (kept, but styled to match theme) */
 .theme-toggle {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 600;
+  top: 18px;
+  right: 18px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+  box-shadow: var(--shadow-sm);
 }
 
 .theme-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(37, 99, 235, 0.25);
 }
 
 .theme-toggle:active {
   transform: translateY(0);
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .container,
+  .container-wide {
+    padding-inline: var(--space-4);
+  }
+
+  .theme-toggle {
+    top: 12px;
+    right: 12px;
+    padding: 9px 10px;
+    font-size: 12px;
+  }
+
+  .App-header {
+    padding: var(--space-10) var(--space-4);
+  }
 }
 
 @keyframes App-logo-spin {
@@ -90,15 +382,5 @@
   }
   to {
     transform: rotate(360deg);
-  }
-}
-
-/* Responsive design for mobile */
-@media (max-width: 768px) {
-  .theme-toggle {
-    top: 10px;
-    right: 10px;
-    padding: 8px 16px;
-    font-size: 12px;
   }
 }
