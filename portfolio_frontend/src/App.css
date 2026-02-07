@@ -605,31 +605,189 @@
   font-weight: 700;
 }
 
-/* Projects Section */
+/* Projects Section - Enhanced with filtering */
+
+/* Filter Bar */
+.project-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-8);
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.filter-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  user-select: none;
+}
+
+.filter-tag:hover {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.30);
+  transform: translateY(-1px);
+}
+
+.filter-tag.active {
+  background: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.filter-tag:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.35);
+  outline-offset: 2px;
+}
+
+/* Projects Grid */
 .projects-grid {
   gap: var(--space-6);
+}
+
+/* Project Card */
+.project-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.project-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
 }
 
 .project-title {
   font-size: 20px;
   font-weight: 700;
-  margin: 0 0 var(--space-3) 0;
+  margin: 0;
+  color: var(--color-text);
 }
 
 .project-summary {
   font-size: 15px;
   line-height: 1.6;
-  margin: 0 0 var(--space-4) 0;
+  margin: 0;
   color: var(--color-muted);
 }
 
+/* Project Sections */
+.project-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.project-section-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-muted);
+  margin: 0;
+}
+
 .project-tech {
-  margin-bottom: var(--space-3);
   gap: var(--space-2);
 }
 
 .project-tags {
   gap: var(--space-2);
+}
+
+/* Project Links */
+.project-links {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Expandable Details */
+.project-details-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.btn-expand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: transparent;
+  border: none;
+  color: var(--color-primary);
+  font-size: 13px;
+  font-weight: 700;
+  padding: var(--space-2) 0;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  text-align: left;
+}
+
+.btn-expand:hover {
+  color: #1d4ed8; /* blue-700 */
+  transform: translateX(2px);
+}
+
+.project-details-content {
+  padding: var(--space-3);
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text);
+  animation: slideDown var(--duration) var(--ease-out);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Empty State */
+.projects-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-10) var(--space-6);
+  text-align: center;
+  color: var(--color-muted);
+  font-size: 16px;
+  background: var(--color-surface);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.projects-empty-state p {
+  margin: 0;
 }
 
 /* Certifications Section */
@@ -981,6 +1139,25 @@
 
   .experience-list::before {
     width: 2px;
+  }
+
+  /* Projects section mobile adjustments */
+  .project-filters {
+    padding: var(--space-3);
+  }
+
+  .filter-tag {
+    flex: 1 1 auto;
+    min-width: max-content;
+    justify-content: center;
+  }
+
+  .project-links {
+    flex-direction: column;
+  }
+
+  .project-links .btn {
+    width: 100%;
   }
 }
 

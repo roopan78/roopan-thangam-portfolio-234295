@@ -1,6 +1,101 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
-import portfolio from './data/portfolio.js';
+import portfolio, { getAllProjectTags, getProjectsByTag } from './data/portfolio.js';
+
+// Section IDs derived from portfolio data (static, defined outside component)
+const sections = [
+  { id: 'hero', label: 'Home' },
+  { id: 'summary', label: 'Summary' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'certifications', label: 'Certifications' },
+  { id: 'education', label: 'Education' },
+  { id: 'contact', label: 'Contact' }
+];
+
+// PUBLIC_INTERFACE
+/**
+ * ProjectCard component with optional expandable details.
+ * Displays project title, summary, tech stack, tags, and links.
+ */
+function ProjectCard({ project }) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <article className="card card-hover project-card">
+      <div className="project-card-header">
+        <h3 className="project-title">{project.title}</h3>
+      </div>
+      
+      <p className="project-summary">{project.summary}</p>
+
+      {/* Tech Stack */}
+      <div className="project-section">
+        <h4 className="project-section-label">Technologies</h4>
+        <div className="project-tech row">
+          {project.tech.map((techItem, techIdx) => (
+            <span key={techIdx} className="chip">{techItem}</span>
+          ))}
+        </div>
+      </div>
+
+      {/* Tags */}
+      <div className="project-section">
+        <h4 className="project-section-label">Categories</h4>
+        <div className="project-tags row">
+          {project.tags.map((tag, tagIdx) => (
+            <span key={tagIdx} className="chip chip-primary">{tag}</span>
+          ))}
+        </div>
+      </div>
+
+      {/* Links (if available) */}
+      {(project.links?.demo || project.links?.repo) && (
+        <div className="project-links">
+          {project.links.demo && (
+            <a 
+              href={project.links.demo} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="btn btn-outline btn-sm"
+            >
+              View Demo
+            </a>
+          )}
+          {project.links.repo && (
+            <a 
+              href={project.links.repo} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="btn btn-outline btn-sm"
+            >
+              View Code
+            </a>
+          )}
+        </div>
+      )}
+
+      {/* Expandable Details Section (optional) */}
+      {project.details && (
+        <div className="project-details-toggle">
+          <button 
+            className="btn-expand"
+            onClick={() => setExpanded(!expanded)}
+            aria-expanded={expanded}
+          >
+            {expanded ? '▼ Less Details' : '▶ More Details'}
+          </button>
+          {expanded && (
+            <div className="project-details-content">
+              <p>{project.details}</p>
+            </div>
+          )}
+        </div>
+      )}
+    </article>
+  );
+}
 
 // PUBLIC_INTERFACE
 /**
@@ -11,18 +106,7 @@ function App() {
   const [theme, setTheme] = useState('light');
   const [activeSection, setActiveSection] = useState('hero');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // Section IDs derived from portfolio data
-  const sections = [
-    { id: 'hero', label: 'Home' },
-    { id: 'summary', label: 'Summary' },
-    { id: 'skills', label: 'Skills' },
-    { id: 'experience', label: 'Experience' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'certifications', label: 'Certifications' },
-    { id: 'education', label: 'Education' },
-    { id: 'contact', label: 'Contact' }
-  ];
+  const [selectedProjectTag, setSelectedProjectTag] = useState('All');
 
   // Theme toggle effect
   useEffect(() => {
@@ -80,6 +164,20 @@ function App() {
       setMobileMenuOpen(false);
     }
   };
+
+  // PUBLIC_INTERFACE
+  /**
+   * Get filtered projects based on selected tag
+   */
+  const getFilteredProjects = () => {
+    if (selectedProjectTag === 'All') {
+      return portfolio.projects;
+    }
+    return getProjectsByTag(selectedProjectTag, portfolio.projects);
+  };
+
+  // Get all available project tags for filter buttons
+  const allProjectTags = ['All', ...getAllProjectTags(portfolio.projects)];
 
   return (
     <div className="App">
@@ -252,30 +350,43 @@ function App() {
           </div>
         </section>
 
-        {/* Projects Section */}
+        {/* Projects Section - Enhanced with filtering */}
         <section id="projects" className="section">
           <div className="container">
             <header className="section-header">
               <h2 className="section-title">Featured Projects</h2>
+              <p className="section-subtitle">
+                Explore my portfolio of Salesforce solutions and technical implementations
+              </p>
             </header>
-            <div className="projects-grid grid grid-2">
-              {portfolio.projects.map((project, idx) => (
-                <div key={idx} className="card card-hover">
-                  <h3 className="project-title">{project.title}</h3>
-                  <p className="project-summary">{project.summary}</p>
-                  <div className="project-tech row">
-                    {project.tech.map((techItem, techIdx) => (
-                      <span key={techIdx} className="chip">{techItem}</span>
-                    ))}
-                  </div>
-                  <div className="project-tags row">
-                    {project.tags.map((tag, tagIdx) => (
-                      <span key={tagIdx} className="chip chip-primary">{tag}</span>
-                    ))}
-                  </div>
-                </div>
+
+            {/* Tag Filter Bar */}
+            <div className="project-filters">
+              {allProjectTags.map((tag) => (
+                <button
+                  key={tag}
+                  className={`filter-tag ${selectedProjectTag === tag ? 'active' : ''}`}
+                  onClick={() => setSelectedProjectTag(tag)}
+                  aria-pressed={selectedProjectTag === tag}
+                >
+                  {tag}
+                </button>
               ))}
             </div>
+
+            {/* Projects Grid */}
+            <div className="projects-grid grid grid-2">
+              {getFilteredProjects().map((project, idx) => (
+                <ProjectCard key={idx} project={project} />
+              ))}
+            </div>
+
+            {/* Empty state when no projects match filter */}
+            {getFilteredProjects().length === 0 && (
+              <div className="projects-empty-state">
+                <p>No projects found for the selected filter.</p>
+              </div>
+            )}
           </div>
         </section>
 
