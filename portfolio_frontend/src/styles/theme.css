@@ -1,0 +1,78 @@
+:root {
+  /* Ocean Professional palette */
+  --color-primary: #2563eb;
+  --color-secondary: #f59e0b;
+  --color-success: #f59e0b;
+  --color-error: #ef4444;
+
+  --color-bg: #f9fafb;
+  --color-surface: #ffffff;
+  --color-text: #111827;
+
+  --color-text-muted: color-mix(in oklab, var(--color-text) 60%, #ffffff);
+  --color-border: color-mix(in oklab, #111827 12%, #ffffff);
+
+  /* Subtle gradients */
+  --gradient-hero: radial-gradient(
+      800px 500px at 15% 10%,
+      color-mix(in oklab, var(--color-primary) 18%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      700px 500px at 85% 0%,
+      color-mix(in oklab, var(--color-secondary) 14%, transparent),
+      transparent 55%
+    ),
+    linear-gradient(180deg, #ffffff 0%, #f9fafb 55%, #f9fafb 100%);
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 56px;
+
+  /* Radius */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 10px rgba(17, 24, 39, 0.06);
+  --shadow-md: 0 10px 30px rgba(17, 24, 39, 0.08);
+  --shadow-lg: 0 18px 45px rgba(17, 24, 39, 0.12);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 120ms;
+  --duration: 180ms;
+  --duration-slow: 320ms;
+
+  /* Layout */
+  --nav-width: 280px;
+  --content-max: 1120px;
+
+  /* Typography */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 22px;
+  --text-2xl: 28px;
+  --text-3xl: 34px;
+
+  --line-height: 1.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration: 0ms;
+    --duration-slow: 0ms;
+  }
+}
