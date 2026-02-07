@@ -847,10 +847,202 @@
 }
 
 /* Contact Section */
-.contact-content {
+.contact-form-wrapper {
   display: flex;
   flex-direction: column;
   gap: var(--space-8);
+}
+
+/* Contact Form */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  background: var(--color-surface);
+  padding: var(--space-8);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  max-width: 700px;
+}
+
+/* Form Groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.required-indicator {
+  color: #ef4444; /* red-500 */
+  font-weight: 700;
+}
+
+/* Form Inputs */
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out), background-color var(--duration) var(--ease-out);
+}
+
+.form-input:hover:not(:disabled),
+.form-textarea:hover:not(:disabled) {
+  border-color: rgba(37, 99, 235, 0.35);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.form-input:disabled,
+.form-textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: rgba(107, 114, 128, 0.05);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+/* Error States */
+.form-input-error {
+  border-color: #ef4444 !important; /* red-500 */
+  background: rgba(239, 68, 68, 0.03);
+}
+
+.form-input-error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+}
+
+.form-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 13px;
+  color: #dc2626; /* red-600 */
+  font-weight: 600;
+  padding: var(--space-2) var(--space-3);
+  background: rgba(239, 68, 68, 0.08);
+  border-radius: 6px;
+  border-left: 3px solid #ef4444;
+}
+
+.form-error::before {
+  content: "⚠";
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* Submit Button */
+.btn-submit {
+  margin-top: var(--space-4);
+  width: 100%;
+  padding: 14px 24px;
+  font-size: 15px;
+}
+
+/* Status Messages */
+.contact-status {
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  border-left: 4px solid;
+  animation: slideDown var(--duration) var(--ease-out);
+}
+
+.contact-status-success {
+  background: rgba(34, 197, 94, 0.10); /* green-500/10 */
+  color: #15803d; /* green-700 */
+  border-left-color: #22c55e; /* green-500 */
+}
+
+.contact-status-error {
+  background: rgba(239, 68, 68, 0.10); /* red-500/10 */
+  color: #b91c1c; /* red-700 */
+  border-left-color: #ef4444; /* red-500 */
+}
+
+.contact-status-submitting {
+  background: rgba(37, 99, 235, 0.10); /* blue-600/10 */
+  color: #1d4ed8; /* blue-700 */
+  border-left-color: var(--color-primary);
+}
+
+/* Copyable Fallback */
+.contact-fallback {
+  margin-top: var(--space-6);
+  padding: var(--space-6);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.contact-fallback-text {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+.contact-fallback-message {
+  background: var(--color-surface);
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  overflow-x: auto;
+}
+
+.contact-fallback-message pre {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  color: var(--color-text);
+}
+
+/* Contact Info Section (below form) */
+.contact-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--color-border);
+}
+
+.contact-info-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-text);
 }
 
 .contact-info {

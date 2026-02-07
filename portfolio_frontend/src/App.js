@@ -16,6 +16,363 @@ const sections = [
 
 // PUBLIC_INTERFACE
 /**
+ * ContactForm component with accessible form validation and mailto fallback.
+ * Supports future backend integration via REACT_APP_API_BASE.
+ */
+function ContactForm() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState('idle'); // idle | submitting | success | error
+  const [statusMessage, setStatusMessage] = useState('');
+  const [showCopyFallback, setShowCopyFallback] = useState(false);
+
+  // PUBLIC_INTERFACE
+  /**
+   * Validates a single field and returns error message if invalid
+   */
+  const validateField = (name, value) => {
+    switch (name) {
+      case 'name':
+        if (!value.trim()) {
+          return 'Name is required';
+        }
+        if (value.trim().length < 2) {
+          return 'Name must be at least 2 characters';
+        }
+        return '';
+      case 'email':
+        if (!value.trim()) {
+          return 'Email is required';
+        }
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+          return 'Please enter a valid email address';
+        }
+        return '';
+      case 'message':
+        if (!value.trim()) {
+          return 'Message is required';
+        }
+        if (value.trim().length < 10) {
+          return 'Message must be at least 10 characters';
+        }
+        return '';
+      default:
+        return '';
+    }
+  };
+
+  // PUBLIC_INTERFACE
+  /**
+   * Handles input change and inline validation
+   */
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Clear error for this field if it was previously invalid
+    if (errors[name]) {
+      const error = validateField(name, value);
+      setErrors(prev => ({ ...prev, [name]: error }));
+    }
+  };
+
+  // PUBLIC_INTERFACE
+  /**
+   * Handles input blur for validation
+   */
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    const error = validateField(name, value);
+    setErrors(prev => ({ ...prev, [name]: error }));
+  };
+
+  // PUBLIC_INTERFACE
+  /**
+   * Validates entire form
+   */
+  const validateForm = () => {
+    const newErrors = {};
+    Object.keys(formData).forEach(key => {
+      const error = validateField(key, formData[key]);
+      if (error) {
+        newErrors[key] = error;
+      }
+    });
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // PUBLIC_INTERFACE
+  /**
+   * Handles mailto fallback with copyable text if mailto fails
+   */
+  const handleMailtoFallback = () => {
+    const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+    );
+    const mailtoUrl = `mailto:${portfolio.profile.email}?subject=${subject}&body=${body}`;
+
+    try {
+      // Try to open mailto
+      window.location.href = mailtoUrl;
+      
+      // Show success message
+      setStatus('success');
+      setStatusMessage('Opening your email client... If it doesn\'t open, you can copy the message below.');
+      setShowCopyFallback(true);
+      
+      // Reset form after a delay
+      setTimeout(() => {
+        setFormData({ name: '', email: '', message: '' });
+        setStatus('idle');
+        setStatusMessage('');
+        setShowCopyFallback(false);
+      }, 10000);
+    } catch (err) {
+      // If mailto fails, show copyable fallback
+      setStatus('error');
+      setStatusMessage('Unable to open email client. Please copy the message below and email manually.');
+      setShowCopyFallback(true);
+    }
+  };
+
+  // PUBLIC_INTERFACE
+  /**
+   * Handles form submission with future backend hook
+   */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Validate form
+    if (!validateForm()) {
+      setStatus('error');
+      setStatusMessage('Please fix the errors above before submitting.');
+      return;
+    }
+
+    setStatus('submitting');
+    setStatusMessage('');
+
+    // Hook for future backend integration
+    const apiBase = process.env.REACT_APP_API_BASE;
+    
+    if (apiBase) {
+      // Future: POST to backend
+      try {
+        const response = await fetch(`${apiBase}/contact`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+          setStatus('success');
+          setStatusMessage('Thank you! Your message has been sent successfully.');
+          setFormData({ name: '', email: '', message: '' });
+          setErrors({});
+          
+          // Clear success message after 5 seconds
+          setTimeout(() => {
+            setStatus('idle');
+            setStatusMessage('');
+          }, 5000);
+        } else {
+          throw new Error('Failed to send message');
+        }
+      } catch (error) {
+        setStatus('error');
+        setStatusMessage('Failed to send message. Please try again or contact me directly via email.');
+        console.error('Contact form error:', error);
+      }
+    } else {
+      // Default: mailto fallback
+      handleMailtoFallback();
+    }
+  };
+
+  // PUBLIC_INTERFACE
+  /**
+   * Copies the message to clipboard
+   */
+  const handleCopyMessage = () => {
+    const messageToCopy = `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`;
+    navigator.clipboard.writeText(messageToCopy).then(() => {
+      alert('Message copied to clipboard!');
+    }).catch(() => {
+      alert('Failed to copy. Please manually copy the text.');
+    });
+  };
+
+  return (
+    <div className="contact-form-wrapper">
+      {/* Status message with ARIA-live for screen readers */}
+      {statusMessage && (
+        <div 
+          className={`contact-status contact-status-${status}`}
+          role="alert"
+          aria-live="polite"
+        >
+          {statusMessage}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="contact-form" noValidate>
+        {/* Name Field */}
+        <div className="form-group">
+          <label htmlFor="contact-name" className="form-label">
+            Name <span className="required-indicator" aria-label="required">*</span>
+          </label>
+          <input
+            type="text"
+            id="contact-name"
+            name="name"
+            className={`form-input ${errors.name ? 'form-input-error' : ''}`}
+            value={formData.name}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            required
+            aria-required="true"
+            aria-invalid={!!errors.name}
+            aria-describedby={errors.name ? 'name-error' : undefined}
+            disabled={status === 'submitting'}
+          />
+          {errors.name && (
+            <span id="name-error" className="form-error" role="alert" aria-live="polite">
+              {errors.name}
+            </span>
+          )}
+        </div>
+
+        {/* Email Field */}
+        <div className="form-group">
+          <label htmlFor="contact-email" className="form-label">
+            Email <span className="required-indicator" aria-label="required">*</span>
+          </label>
+          <input
+            type="email"
+            id="contact-email"
+            name="email"
+            className={`form-input ${errors.email ? 'form-input-error' : ''}`}
+            value={formData.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            required
+            aria-required="true"
+            aria-invalid={!!errors.email}
+            aria-describedby={errors.email ? 'email-error' : undefined}
+            disabled={status === 'submitting'}
+          />
+          {errors.email && (
+            <span id="email-error" className="form-error" role="alert" aria-live="polite">
+              {errors.email}
+            </span>
+          )}
+        </div>
+
+        {/* Message Field */}
+        <div className="form-group">
+          <label htmlFor="contact-message" className="form-label">
+            Message <span className="required-indicator" aria-label="required">*</span>
+          </label>
+          <textarea
+            id="contact-message"
+            name="message"
+            className={`form-input form-textarea ${errors.message ? 'form-input-error' : ''}`}
+            value={formData.message}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            rows="6"
+            required
+            aria-required="true"
+            aria-invalid={!!errors.message}
+            aria-describedby={errors.message ? 'message-error' : undefined}
+            disabled={status === 'submitting'}
+          />
+          {errors.message && (
+            <span id="message-error" className="form-error" role="alert" aria-live="polite">
+              {errors.message}
+            </span>
+          )}
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="btn btn-primary btn-submit"
+          disabled={status === 'submitting'}
+          aria-disabled={status === 'submitting'}
+        >
+          {status === 'submitting' ? 'Sending...' : 'Send Message'}
+        </button>
+      </form>
+
+      {/* Copyable Fallback (shown if mailto fails) */}
+      {showCopyFallback && (
+        <div className="contact-fallback">
+          <p className="contact-fallback-text">
+            You can also email me directly at: <strong>{portfolio.profile.email}</strong>
+          </p>
+          <div className="contact-fallback-message">
+            <pre>{`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`}</pre>
+          </div>
+          <button 
+            type="button" 
+            className="btn btn-outline btn-sm"
+            onClick={handleCopyMessage}
+          >
+            Copy Message
+          </button>
+        </div>
+      )}
+
+      {/* Contact Info & Links */}
+      <div className="contact-info-section">
+        <h3 className="contact-info-title">Other Ways to Connect</h3>
+        <div className="contact-info">
+          <div className="contact-item">
+            <span className="contact-label">Email:</span>
+            <a href={`mailto:${portfolio.profile.email}`} className="App-link">
+              {portfolio.profile.email}
+            </a>
+          </div>
+          <div className="contact-item">
+            <span className="contact-label">Phone:</span>
+            <a href={`tel:${portfolio.profile.phone}`} className="App-link">
+              {portfolio.profile.phone}
+            </a>
+          </div>
+          <div className="contact-item">
+            <span className="contact-label">Location:</span>
+            <span>{portfolio.profile.location}</span>
+          </div>
+        </div>
+        <div className="contact-links row">
+          <a href={portfolio.profile.links.github} target="_blank" rel="noopener noreferrer" className="btn btn-outline">
+            GitHub
+          </a>
+          <a href={portfolio.profile.links.linkedin} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+            LinkedIn
+          </a>
+          <a href={portfolio.profile.links.trailhead} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+            Trailhead
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// PUBLIC_INTERFACE
+/**
  * ProjectCard component with optional expandable details.
  * Displays project title, summary, tech stack, tags, and links.
  */
@@ -439,37 +796,7 @@ function App() {
               <h2 className="section-title">Get In Touch</h2>
               <p className="section-subtitle">Feel free to reach out for opportunities or collaborations.</p>
             </header>
-            <div className="contact-content">
-              <div className="contact-info">
-                <div className="contact-item">
-                  <span className="contact-label">Email:</span>
-                  <a href={`mailto:${portfolio.profile.email}`} className="App-link">
-                    {portfolio.profile.email}
-                  </a>
-                </div>
-                <div className="contact-item">
-                  <span className="contact-label">Phone:</span>
-                  <a href={`tel:${portfolio.profile.phone}`} className="App-link">
-                    {portfolio.profile.phone}
-                  </a>
-                </div>
-                <div className="contact-item">
-                  <span className="contact-label">Location:</span>
-                  <span>{portfolio.profile.location}</span>
-                </div>
-              </div>
-              <div className="contact-links row">
-                <a href={portfolio.profile.links.github} target="_blank" rel="noopener noreferrer" className="btn btn-outline">
-                  GitHub
-                </a>
-                <a href={portfolio.profile.links.linkedin} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-                  LinkedIn
-                </a>
-                <a href={portfolio.profile.links.trailhead} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
-                  Trailhead
-                </a>
-              </div>
-            </div>
+            <ContactForm />
           </div>
         </section>
 
