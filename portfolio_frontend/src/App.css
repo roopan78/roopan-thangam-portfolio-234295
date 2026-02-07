@@ -33,6 +33,7 @@
   /* Layout */
   --container-max: 1100px;
   --container-max-wide: 1200px;
+  --side-nav-width: 280px;
 
   /* Spacing scale */
   --space-1: 4px;
@@ -77,47 +78,542 @@
   color: var(--color-text);
   font-family: var(--font-sans);
   transition: background-color var(--duration) var(--ease-out), color var(--duration) var(--ease-out);
+  display: flex;
+  flex-direction: column;
 }
 
-/* Keep CRA logo animation behavior */
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-  filter: drop-shadow(0 10px 20px rgba(17, 24, 39, 0.10));
+/* === NAVIGATION === */
+
+/* Desktop Side Navigation (fixed) */
+.side-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--side-nav-width);
+  height: 100vh;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  padding: var(--space-8) var(--space-6);
+  overflow-y: auto;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  transition: background-color var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.side-nav-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-border);
 }
 
-/* CRA header class still works (used by template App.js) */
-.App-header {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: var(--space-10) var(--space-6);
-  background: var(--gradient-hero);
+.side-nav-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.side-nav-subtitle {
+  font-size: 14px;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+.theme-toggle-desktop {
+  margin-top: var(--space-4);
+  background: var(--color-bg);
   color: var(--color-text);
-  transition: background-color var(--duration) var(--ease-out);
-  position: relative;
-  gap: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.theme-toggle-desktop:hover {
+  border-color: var(--color-primary);
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.side-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.side-nav-list .nav-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.side-nav-list .nav-link:hover {
+  background: var(--color-bg);
+  color: var(--color-primary);
+}
+
+.side-nav-list .nav-link.active {
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--color-primary);
+  font-weight: 700;
+  border-left: 3px solid var(--color-primary);
+}
+
+/* Mobile Header & Navigation (hidden on desktop) */
+.mobile-header {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  z-index: 200;
+  transition: background-color var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out);
+}
+
+.mobile-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4) var(--space-5);
+}
+
+.mobile-logo {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.mobile-header-actions {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.theme-toggle-mobile,
+.mobile-menu-toggle {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  color: var(--color-text);
+}
+
+.theme-toggle-mobile:hover,
+.mobile-menu-toggle:hover {
+  background: var(--color-bg);
+  border-color: var(--color-primary);
+}
+
+.mobile-nav {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--duration) var(--ease-out);
+  background: var(--color-surface);
+}
+
+.mobile-nav.open {
+  max-height: 500px;
+  border-top: 1px solid var(--color-border);
+}
+
+.mobile-nav ul {
+  list-style: none;
+  padding: var(--space-4) 0;
+  margin: 0;
+}
+
+.mobile-nav ul li {
+  margin: 0;
+}
+
+.mobile-nav .nav-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: var(--space-3) var(--space-5);
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  border-left: 3px solid transparent;
+}
+
+.mobile-nav .nav-link:hover {
+  background: var(--color-bg);
+  color: var(--color-primary);
+}
+
+.mobile-nav .nav-link.active {
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--color-primary);
+  font-weight: 700;
+  border-left-color: var(--color-primary);
+}
+
+/* Main Content Layout */
+.main-content {
+  margin-left: var(--side-nav-width);
+  min-height: 100vh;
+  scroll-behavior: smooth;
+}
+
+/* === SECTIONS === */
+
+.section {
+  padding-block: clamp(48px, 6vw, 80px);
+  scroll-margin-top: 0;
+}
+
+.section-header {
+  margin-bottom: var(--space-8);
+}
+
+.section-title {
+  font-size: clamp(24px, 3vw, 36px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--space-3) 0;
+  font-weight: 700;
+}
+
+.section-subtitle {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+.bg-surface {
+  background: var(--color-surface);
+}
+
+.bg-hero-gradient {
+  background: var(--gradient-hero);
+}
+
+/* Hero Section */
+.hero-section {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
 }
 
-/* CRA link class still works */
-.App-link {
-  color: var(--color-primary);
-  font-weight: 600;
-  text-decoration: none;
-  transition: color var(--duration-fast) var(--ease-out), text-decoration-color var(--duration-fast) var(--ease-out);
+.hero-title {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 700;
+  margin: 0 0 var(--space-3) 0;
+  letter-spacing: -0.03em;
 }
 
-.App-link:hover {
-  color: #1d4ed8; /* blue-700 */
-  text-decoration: underline;
-  text-decoration-color: rgba(37, 99, 235, 0.35);
+.hero-role {
+  font-size: clamp(20px, 2.5vw, 28px);
+  color: var(--color-primary);
+  font-weight: 600;
+  margin: 0 0 var(--space-2) 0;
+}
+
+.hero-location {
+  font-size: 16px;
+  color: var(--color-muted);
+  margin: 0 0 var(--space-8) 0;
+}
+
+.hero-links {
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+/* Summary Section */
+.summary-text {
+  font-size: 18px;
+  line-height: 1.7;
+  margin-bottom: var(--space-8);
+  color: var(--color-text);
+}
+
+.highlights-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.highlight-item {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-4);
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.highlight-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: white;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* Skills Section */
+.skills-grid {
+  gap: var(--space-6);
+}
+
+.skill-group-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 var(--space-4) 0;
+  color: var(--color-primary);
+}
+
+.skill-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.skill-item {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.skill-bullet {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* Experience Section */
+.experience-list {
+  gap: var(--space-6);
+}
+
+.experience-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.experience-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 var(--space-1) 0;
+}
+
+.experience-company {
+  font-size: 16px;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin: 0;
+}
+
+.experience-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-1);
+  text-align: right;
+}
+
+.experience-period {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.experience-location {
+  font-size: 14px;
+}
+
+.experience-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.experience-bullets li {
+  padding-left: var(--space-5);
+  position: relative;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.experience-bullets li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* Projects Section */
+.projects-grid {
+  gap: var(--space-6);
+}
+
+.project-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 var(--space-3) 0;
+}
+
+.project-summary {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 var(--space-4) 0;
+  color: var(--color-muted);
+}
+
+.project-tech {
+  margin-bottom: var(--space-3);
+  gap: var(--space-2);
+}
+
+.project-tags {
+  gap: var(--space-2);
+}
+
+/* Certifications Section */
+.certifications-grid {
+  gap: var(--space-6);
+}
+
+.cert-name {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 var(--space-2) 0;
+}
+
+.cert-issuer {
+  font-size: 14px;
+  margin: 0 0 var(--space-1) 0;
+}
+
+.cert-year {
+  font-size: 14px;
+  margin: 0 0 var(--space-4) 0;
+  font-weight: 600;
+}
+
+.btn-sm {
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+/* Education Section */
+.education-list {
+  gap: var(--space-6);
+}
+
+.edu-institution {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 var(--space-2) 0;
+}
+
+.edu-degree {
+  font-size: 16px;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin: 0 0 var(--space-1) 0;
+}
+
+.edu-period {
+  font-size: 14px;
+  margin: 0 0 var(--space-3) 0;
+}
+
+.edu-details {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Contact Section */
+.contact-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.contact-item {
+  display: flex;
+  gap: var(--space-3);
+  align-items: baseline;
+  font-size: 16px;
+}
+
+.contact-label {
+  font-weight: 700;
+  min-width: 80px;
+}
+
+.contact-links {
+  gap: var(--space-4);
+}
+
+/* Footer */
+.footer {
+  padding: var(--space-8) 0;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+}
+
+.footer-text {
+  text-align: center;
+  color: var(--color-muted);
+  font-size: 14px;
+  margin: 0;
 }
 
 /* === Layout primitives === */
@@ -134,35 +630,6 @@
   max-width: var(--container-max-wide);
   margin-inline: auto;
   padding-inline: var(--space-6);
-}
-
-.section {
-  padding-block: clamp(32px, 5vw, 56px);
-}
-
-.section-header {
-  margin-bottom: var(--space-6);
-}
-
-.section-title {
-  font-size: clamp(20px, 2.2vw, 28px);
-  line-height: 1.25;
-  letter-spacing: -0.02em;
-  margin: 0 0 var(--space-2) 0;
-}
-
-.section-subtitle {
-  margin: 0;
-  color: var(--color-muted);
-  line-height: 1.6;
-}
-
-.bg-surface {
-  background: var(--color-surface);
-}
-
-.bg-hero-gradient {
-  background: var(--gradient-hero);
 }
 
 /* === Cards === */
@@ -191,7 +658,7 @@
   gap: var(--space-2);
   border-radius: 12px;
   border: 1px solid transparent;
-  padding: 10px 14px;
+  padding: 12px 20px;
   font-weight: 700;
   font-size: 14px;
   line-height: 1;
@@ -256,7 +723,7 @@
   align-items: center;
   gap: 6px;
   border-radius: 999px;
-  padding: 6px 10px;
+  padding: 6px 12px;
   font-size: 12px;
   font-weight: 700;
   line-height: 1;
@@ -315,10 +782,71 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+/* === RESPONSIVE BREAKPOINTS === */
+
 @media (max-width: 900px) {
   .grid-2,
   .grid-3 {
     grid-template-columns: 1fr;
+  }
+
+  .experience-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .experience-meta {
+    align-items: flex-start;
+    text-align: left;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Hide desktop side nav */
+  .side-nav {
+    display: none;
+  }
+
+  /* Show mobile header */
+  .mobile-header {
+    display: block;
+  }
+
+  /* Reset main content margin */
+  .main-content {
+    margin-left: 0;
+    padding-top: 60px; /* Account for fixed mobile header */
+  }
+
+  .section {
+    scroll-margin-top: 60px; /* Offset for mobile header */
+  }
+
+  .container,
+  .container-wide {
+    padding-inline: var(--space-4);
+  }
+
+  .hero-section {
+    min-height: 60vh;
+  }
+
+  .hero-links {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-links .btn {
+    width: 100%;
+  }
+
+  .contact-links {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .contact-links .btn {
+    width: 100%;
   }
 }
 
@@ -330,7 +858,57 @@
   border-radius: 10px;
 }
 
-/* Existing template class: theme toggle button (kept, but styled to match theme) */
+/* Keep CRA logo animation behavior (legacy) */
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+  filter: drop-shadow(0 10px 20px rgba(17, 24, 39, 0.10));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* CRA header class still works (used by template App.js) */
+.App-header {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: var(--space-10) var(--space-6);
+  background: var(--gradient-hero);
+  color: var(--color-text);
+  transition: background-color var(--duration) var(--ease-out);
+  position: relative;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+/* CRA link class still works */
+.App-link {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out), text-decoration-color var(--duration-fast) var(--ease-out);
+}
+
+.App-link:hover {
+  color: #1d4ed8; /* blue-700 */
+  text-decoration: underline;
+  text-decoration-color: rgba(37, 99, 235, 0.35);
+}
+
+/* Existing template class: theme toggle button (kept for compatibility) */
 .theme-toggle {
   position: absolute;
   top: 18px;
@@ -355,32 +933,4 @@
 
 .theme-toggle:active {
   transform: translateY(0);
-}
-
-/* Responsive tweaks */
-@media (max-width: 768px) {
-  .container,
-  .container-wide {
-    padding-inline: var(--space-4);
-  }
-
-  .theme-toggle {
-    top: 12px;
-    right: 12px;
-    padding: 9px 10px;
-    font-size: 12px;
-  }
-
-  .App-header {
-    padding: var(--space-10) var(--space-4);
-  }
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
